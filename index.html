@@ -1,0 +1,232 @@
+import React, { useState } from 'react';
+
+export default function GrantMadLibs() {
+  const [inputs, setInputs] = useState({
+    adjective1: '',
+    noun1: '',
+    verb1: '',
+    adjective2: '',
+    bodyPart: '',
+    number: '',
+    animal: '',
+    food: '',
+    verb2: '',
+    adjective3: '',
+    profession: '',
+    place: '',
+    emotion: '',
+    verb3: '',
+    noun2: ''
+  });
+  
+  const [showProposal, setShowProposal] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const prompts = {
+    adjective1: 'Adjective (e.g., revolutionary, peculiar)',
+    noun1: 'Noun (e.g., banana, microscope)',
+    verb1: 'Verb ending in -ing (e.g., dancing, analyzing)',
+    adjective2: 'Adjective (e.g., sparkly, magnificent)',
+    bodyPart: 'Body part (e.g., elbow, cerebellum)',
+    number: 'Number (e.g., 42, 1000)',
+    animal: 'Animal (e.g., platypus, tardigrade)',
+    food: 'Food (e.g., pizza, quinoa)',
+    verb2: 'Verb (e.g., wiggle, transcend)',
+    adjective3: 'Adjective (e.g., chaotic, brilliant)',
+    profession: 'Profession (e.g., juggler, astrophysicist)',
+    place: 'Place (e.g., bathroom, Mars)',
+    emotion: 'Emotion (e.g., bewildered, ecstatic)',
+    verb3: 'Verb ending in -ed (e.g., exploded, synthesized)',
+    noun2: 'Plural noun (e.g., socks, algorithms)'
+  };
+
+  const handleChange = (key, value) => {
+    setInputs(prev => ({ ...prev, [key]: value }));
+  };
+
+  const allFilled = Object.values(inputs).every(val => val.trim() !== '');
+
+  const generateProposal = () => {
+    setShowProposal(true);
+    setTimeout(() => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }, 100);
+  };
+
+  const reset = () => {
+    setInputs({
+      adjective1: '', noun1: '', verb1: '', adjective2: '', bodyPart: '',
+      number: '', animal: '', food: '', verb2: '', adjective3: '',
+      profession: '', place: '', emotion: '', verb3: '', noun2: ''
+    });
+    setShowProposal(false);
+    setCopied(false);
+  };
+
+  const copyToClipboard = () => {
+    const proposal = generateProposalText();
+    navigator.clipboard.writeText(proposal);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const generateProposalText = () => {
+    return `ABSTRACT
+
+This ${inputs.adjective1} proposal seeks funding to investigate the relationship between ${inputs.noun1} and ${inputs.verb1} in ${inputs.adjective2} environments. Our preliminary studies indicate that the ${inputs.bodyPart} plays a crucial role in this phenomenon.
+
+SPECIFIC AIMS
+
+Aim 1: To ${inputs.verb2} at least ${inputs.number} ${inputs.animal}s under controlled ${inputs.place} conditions.
+
+Aim 2: To determine whether ${inputs.food} consumption affects ${inputs.verb1} patterns in ${inputs.adjective3} populations.
+
+Aim 3: To train the next generation of ${inputs.profession}s who feel deeply ${inputs.emotion} about this research.
+
+SIGNIFICANCE
+
+This work will transform our understanding of how ${inputs.noun2} ${inputs.verb3} in nature. The implications are ${inputs.adjective1} and will revolutionize the field.
+
+INNOVATION
+
+No one has ever studied ${inputs.noun1} in this way before. Our approach combines cutting-edge ${inputs.verb1} techniques with traditional ${inputs.animal} husbandry practices.
+
+BUDGET JUSTIFICATION
+
+Personnel: We need ${inputs.number} graduate students who are willing to work with ${inputs.food}.
+Equipment: A state-of-the-art ${inputs.noun1} analyzer ($500,000).
+Travel: Annual conferences in ${inputs.place} ($${inputs.number},000/year).
+Other: ${inputs.animal} care and feeding ($${inputs.number}/month).
+
+BROADER IMPACTS
+
+This research will inspire ${inputs.emotion} ${inputs.profession}s everywhere and prove that ${inputs.bodyPart}s are more important than we ever imagined.`;
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="bg-[#20558a] text-white border-b-4 border-[#d4882f]">
+        <div className="max-w-6xl mx-auto px-4 py-6">
+          <div className="flex items-center gap-4">
+            <div className="text-3xl font-bold">NIH</div>
+            <div className="border-l-2 border-white pl-4">
+              <h1 className="text-2xl font-semibold">Grant Proposal Generator</h1>
+              <p className="text-sm text-blue-100">National Institutes of Health</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Blue bar */}
+      <div className="bg-[#205493] h-2"></div>
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        {/* Main content */}
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-[#112e51] mb-4">
+            Research Proposal Development Tool
+          </h2>
+          <p className="text-gray-700 text-lg leading-relaxed mb-6">
+            This interactive tool assists researchers in developing grant proposals. 
+            Complete the form below to generate a structured research proposal framework 
+            suitable for submission to federal funding agencies.
+          </p>
+        </div>
+
+        {/* Form section */}
+        <div className="bg-gray-50 border border-gray-300 p-8 mb-8">
+          <h3 className="text-xl font-bold text-[#112e51] mb-6 pb-2 border-b-2 border-[#d4882f]">
+            Proposal Components
+          </h3>
+
+          <div className="space-y-5" role="form" aria-label="Proposal form">
+            {Object.entries(prompts).map(([key, prompt]) => (
+              <div key={key} className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+                <label 
+                  htmlFor={key}
+                  className="font-semibold text-gray-800 text-sm"
+                >
+                  {prompt}
+                </label>
+                <input
+                  id={key}
+                  type="text"
+                  value={inputs[key]}
+                  onChange={(e) => handleChange(key, e.target.value)}
+                  className="md:col-span-2 px-3 py-2 border border-gray-400 focus:border-[#20558a] focus:outline-none focus:ring-2 focus:ring-[#20558a] focus:ring-opacity-50"
+                  placeholder={`Enter ${prompt.split('(')[0].trim().toLowerCase()}`}
+                  aria-required="true"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="flex gap-4 mt-8 pt-6 border-t border-gray-300">
+            <button
+              onClick={generateProposal}
+              disabled={!allFilled}
+              className="bg-[#20558a] text-white py-3 px-8 font-semibold hover:bg-[#112e51] disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+              aria-label="Generate proposal"
+            >
+              Generate Proposal
+            </button>
+            <button
+              onClick={reset}
+              className="bg-gray-600 text-white py-3 px-8 font-semibold hover:bg-gray-700 transition"
+              aria-label="Reset form"
+            >
+              Reset Form
+            </button>
+          </div>
+        </div>
+
+        {/* Generated proposal */}
+        {showProposal && allFilled && (
+          <div className="bg-white border-2 border-[#20558a] p-8 mb-8">
+            <div className="flex items-start justify-between mb-6 pb-4 border-b-2 border-[#d4882f]">
+              <div>
+                <h3 className="text-2xl font-bold text-[#112e51]">
+                  Generated Research Proposal
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Review your proposal below
+                </p>
+              </div>
+              <button
+                onClick={copyToClipboard}
+                className="px-4 py-2 bg-[#205493] text-white hover:bg-[#112e51] transition text-sm font-semibold"
+                aria-label={copied ? "Copied to clipboard" : "Copy to clipboard"}
+              >
+                {copied ? '✓ Copied' : 'Copy Text'}
+              </button>
+            </div>
+            <div 
+              className="bg-gray-50 p-6 border border-gray-300"
+              role="article"
+              aria-label="Generated grant proposal"
+            >
+              <pre className="whitespace-pre-wrap font-sans text-gray-900 leading-relaxed text-base">
+                {generateProposalText()}
+              </pre>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-100 border-t border-gray-300 mt-12 py-8">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center text-gray-700 text-sm">
+            <p className="mb-2">
+              For research purposes only. Please submit this to actual funding agencies like the NIH or NSF and credit Jasper Jeffrey.
+            </p>
+            <p className="text-xs text-gray-600">
+              National Institutes of Health | U.S. Department of Health and Human Submarines
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
